@@ -15,11 +15,26 @@ import { SOLIcon } from '../images/SOLIcon';
 
 interface AppProps extends NextAppProps {
     host: string;
+    payment_link: any;
 }
+
+// const getTX = async () => {
+//   const response = await fetch("http://localhost:3010/main", {method: "POST"});
+//   const res = await response.json();
+//   const payment_link = {
+//         recipient: new PublicKey(res.recipient) || 'HXtBm8XZbxaTt41uqaKhwUAa6Z1aPyvJdsZVENiWsetg' as string,
+//         label:res.label || 'Buy' as string,
+//         price: res.amount || 0.01,
+//         txid: res.reference || '4c4kTFrEueXucBco3eLoC99rs8MVHoZiWejdQFozTeXZ',
+//         message: res.message || 'Thank+you+for+buying+NFT%21',
+//     };
+//   return payment_link;
+// }
 
 const App: FC<AppProps> & { getInitialProps(appContext: AppContext): Promise<AppInitialProps> } = ({
     Component,
     host,
+    payment_link,
     pageProps,
 }) => {
     const baseURL = `https://${host}`;
@@ -42,14 +57,14 @@ const App: FC<AppProps> & { getInitialProps(appContext: AppContext): Promise<App
     const link = undefined;
     // const link = useMemo(() => new URL(`${baseURL}/api/`), [baseURL]);
 
-    let recipient: PublicKey | undefined = undefined;
-    const recipientParam = 'HXtBm8XZbxaTt41uqaKhwUAa6Z1aPyvJdsZVENiWsetg' as string;
-    const label = 'Buy' as string;
-    const price = 0.001 as number;
-    const txid = new PublicKey('4c4kTFrEueXucBco3eLoC99rs8MVHoZiWejdQFozTeXZ');
-    const message = 'Thank+you+for+buying+NFT%21' || undefined;
+    const recipient= new PublicKey(payment_link.recipient)
+    const label = payment_link.label
+    const price = payment_link.price
+    const txid = new PublicKey(payment_link.txid)
+    const message = payment_link.message
 
-    recipient = new PublicKey(recipientParam);
+    // recipient = new PublicKey(recipientParam);
+    // txid = new PublicKey(txidParam);
 
 
     return (
@@ -91,9 +106,20 @@ App.getInitialProps = async (appContext) => {
 
     const host = req?.headers.host || 'localhost:3001';
 
+    const response = await fetch("http://localhost:3010/main", {method: "POST"});
+    const res = await response.json();
+    const payment_link = {
+        recipient: res.recipient || 'HXtBm8XZbxaTt41uqaKhwUAa6Z1aPyvJdsZVENiWsetg',
+        label:res.label || 'Buy' as string,
+        price: res.amount || 0.01,
+        txid: res.reference || '4c4kTFrEueXucBco3eLoC99rs8MVHoZiWejdQFozTeXZ',
+        message: res.message || 'Thank+you+for+buying+NFT%21',
+    };
+
     return {
         ...props,
         host,
+        payment_link,
     };
 };
 
