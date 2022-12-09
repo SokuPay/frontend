@@ -15,11 +15,12 @@ export const QRCode: FC = () => {
         return () => window.removeEventListener('resize', listener);
     }, []);
 
-    const { url } = usePayment();
+    const { url, amount } = usePayment();
     const options = useMemo(() => createQROptions(url, size, 'transparent', '#2a2a2a'), [url, size]);
-
     const qr = useMemo(() => new QRCodeStyling(), []);
-    useEffect(() => qr.update(options), [qr, options]);
+    useEffect(() => {
+        qr.update(options);
+    }, [qr, options, amount]);
 
     const ref = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -28,5 +29,5 @@ export const QRCode: FC = () => {
         }
     }, [ref, qr]);
 
-    return <div ref={ref} className={css.root} />;
+    return <div ref={ref} className={css.root} ></div>;
 };

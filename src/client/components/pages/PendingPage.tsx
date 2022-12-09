@@ -2,7 +2,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
-import axios from "axios";
+// import axios from "axios";
 import { useConfig } from '../../hooks/useConfig';
 import { usePayment } from '../../hooks/usePayment';
 import { BackButton } from '../buttons/BackButton';
@@ -19,7 +19,7 @@ const searchCollection = async () => {
 }
 
 
-const PendingPage: NextPage = () => {
+const PendingPage: NextPage = (url) => {
     const { symbol, connectWallet } = useConfig();
     const { amount, reset } = usePayment();
     const { publicKey } = useWallet();
@@ -29,6 +29,10 @@ const PendingPage: NextPage = () => {
     const handleClick = async () => {
         const res = await searchCollection();
         setCollection(res);
+    }
+
+    const price = (CCprice: number) => {
+        return(Math.round(Number(CCprice)*0.0000001)/100);
     }
 
 
@@ -46,6 +50,7 @@ const PendingPage: NextPage = () => {
                 {connectWallet ? <WalletMultiButton /> : null}
             </div>
             <div className={css.main}>
+                <div className={css.amount}>Okay Bear #7030</div>
                 <div className={css.amount}>
                     <Amount amount={amount} />
                     <span className={css.symbol}>{symbol}</span>
@@ -54,20 +59,21 @@ const PendingPage: NextPage = () => {
                 <div className={css.code}>
                     <QRCode />
                 </div>
-                <div className={css.amount}>Okay Bear #7030　Activities</div>
-                {collection.map((item) => (
-                    <div className={css.transaction}>
+                <div className={css.scan}>Scan this code with your Solana Pay wallet</div>
+                <div className={css.confirm}>You'll be asked to approve the transaction</div>
+
+                <div className={css.activities}>Creater's Collection Activities</div>
+                {collection.map((item, index) => (
+                    <div className={css.transaction} key={index}>
                         <div className={css.left}>
-                            <div className={css.amount}>{item.price} SOL</div>
+                            <div className={css.amount}>{price(Number(item['price']))} SOL</div>
                         </div>
                         <div className={css.right}>
-                            <div>marketplace: {item.marketplace}</div>
-                            <div className={css.time}>time: {item.time}</div>
+                            <div>marketplace: {item['marketplace']}</div>
+                            <div className={css.time}>time: {item['time']}</div>
                         </div>
                     </div>
                 ))}
-                <div className={css.scan}>Scan this code with your Solana Pay wallet</div>
-                <div className={css.confirm}>You'll be asked to approve the transaction</div>
             </div>
             <div className={css.footer}>
                 <PoweredBy />
@@ -84,9 +90,9 @@ export function getServerSideProps() {
     // See https://nextjs.org/docs/api-reference/data-fetching/get-initial-props
     // const res = await searchCollection();
     // console.log(res);
-
+    //
     // const res = await axios.get(
-    //     'https://api.coralcube.cc/0dec5037-f67d-4da8-9eb6-97e2a09ffe9a/inspector/getMintActivities?update_authority=4zj22pu8yRyenFHwLmue28CqVmGFgVQt5FmVvwdP5fLa&collection_symbol=okay_bears&limit=10',
+    //     'http://localhost:3010/main',
     //     {
     //         headers: {
     //             Accept: 'application/json, text/plain, */*',
@@ -96,9 +102,8 @@ export function getServerSideProps() {
     // );
     // console.log('res ', res);
 
+
     return {
-        props: {
-            // initCollection: res
-        },
+        props: {},
     };
 }

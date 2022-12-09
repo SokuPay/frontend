@@ -8,6 +8,8 @@ export interface ConfigContextState {
     recipient: PublicKey;
     label: string;
     message?: string;
+    txid: PublicKey;
+    price: number;
     splToken: PublicKey | undefined;
     symbol: string;
     icon: ReactElement;

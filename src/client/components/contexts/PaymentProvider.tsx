@@ -23,7 +23,7 @@ export interface PaymentProviderProps {
 
 export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
     const { connection } = useConnection();
-    const { link, recipient, splToken, label, message, requiredConfirmations, connectWallet } = useConfig();
+    const { link, recipient, splToken, label, message, txid, requiredConfirmations, connectWallet } = useConfig();
     const { publicKey, sendTransaction } = useWallet();
 
     const [amount, setAmount] = useState<BigNumber>();
@@ -91,7 +91,7 @@ export const PaymentProvider: FC<PaymentProviderProps> = ({ children }) => {
 
     const generate = useCallback(() => {
         if (status === PaymentStatus.New && !reference) {
-            setReference(Keypair.generate().publicKey);
+            setReference(txid);
             setStatus(PaymentStatus.Pending);
             navigate('/pending');
         }

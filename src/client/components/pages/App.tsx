@@ -43,9 +43,11 @@ const App: FC<AppProps> & { getInitialProps(appContext: AppContext): Promise<App
     // const link = useMemo(() => new URL(`${baseURL}/api/`), [baseURL]);
 
     let recipient: PublicKey | undefined = undefined;
-    const recipientParam = '9GgVAe6rgWQwMyo9Bm9EGschJc6sAfaXyJNkaDVCKLAi' as string;
-    const label = 'sdfa' as string;
-    const message = '' || undefined;
+    const recipientParam = 'HXtBm8XZbxaTt41uqaKhwUAa6Z1aPyvJdsZVENiWsetg' as string;
+    const label = 'Buy' as string;
+    const price = 0.001 as number;
+    const txid = new PublicKey('HMwNaAjEr2fzFM5xRHh9xJMn2ocQA8tSw9xcba1yJLoF');
+    const message = 'Thank+you+for+buying+NFT%21' || undefined;
 
     recipient = new PublicKey(recipientParam);
 
@@ -62,6 +64,8 @@ const App: FC<AppProps> & { getInitialProps(appContext: AppContext): Promise<App
                                 recipient={recipient}
                                 label={label}
                                 message={message}
+                                txid={txid}
+                                price={price}
                                 symbol="SOL"
                                 icon={<SOLIcon />}
                                 decimals={9}
