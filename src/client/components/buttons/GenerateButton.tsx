@@ -11,6 +11,7 @@ export const GenerateButton: FC = () => {
             type="button"
             onClick={generate}
             disabled={!amount || amount.isLessThanOrEqualTo(0)}
+            id="inquire"
         >
             Inquire NFT price
         </button>
