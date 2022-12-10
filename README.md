@@ -16,6 +16,11 @@ npm install
 ```shell
 npm run dev
 ```
+If you want to run it on a raspberry pi, use the following command
+```shell
+npm run build
+npm run start
+```
 
 ### In a separate terminal, run a local SSL proxy
 ```shell
